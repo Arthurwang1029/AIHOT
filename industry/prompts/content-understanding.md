@@ -10,15 +10,15 @@
 
 `itemType` 必须七选一：
 
-- `model_release`：新模型或大版本更新
-- `product_launch`：新产品、工具或重大功能更新
-- `tool_or_prompt`：可直接复用的方法、Prompt、Skill 或技巧
-- `research_paper`：论文、研究或技术报告
-- `industry_event`：融资、收购、监管、诉讼、商业动作或人事
-- `opinion_analysis`：观点、行业判断、复盘或长访谈
-- `tutorial_explainer`：教程、科普、解读或评测
+- `model_release`：新出台或调整的政策、制度、收费标准（如社保缴费基数、医保、养老、户籍、税费规则）
+- `product_launch`：企业或平台的规则、价格、服务变化直接影响普通人（如裁员、降薪、涨价、退费难、平台规则调整）
+- `tool_or_prompt`：普通人可以直接用的维权、办事、避坑或应对方法
+- `research_paper`：调查报道、统计数据、研究或系统性的一手调研
+- `industry_event`：具体发生的民生事件、公共争议、舆论管控、执法冲突或诉讼
+- `opinion_analysis`：评论、观点、个人自述与长访谈
+- `tutorial_explainer`：科普、解读、政策说明或事件梳理
 
-优先级：发了模型选 model_release；发了工具选 product_launch；发了 Prompt 或方法选 tool_or_prompt；论文优先 research_paper；评测选 tutorial_explainer。
+类型键名沿用框架的固定取值，含义按本站重新定义。优先级：新政策或收费规则选 model_release；企业或平台规则变化选 product_launch；维权办事方法选 tool_or_prompt；调查与数据选 research_paper；解读梳理选 tutorial_explainer。
 
 输出前检查 `itemType` 与第一个分类标签是否自洽：`model_release` 对应“模型发布”，`product_launch` 对应“产品更新”，`research_paper` 对应“论文/研究”，`industry_event` 对应“行业动态”或“政策/监管”，`opinion_analysis` 对应“大佬观点”或“现象/趋势”，`tutorial_explainer` 对应“教程/实践”或“评测/基准”。如果二者冲突，按当前材料的核心事件修正后再输出。
 
