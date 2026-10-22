@@ -3,7 +3,8 @@
     "示范信源：首次启动时导入（scripts/seed.ts），已存在的不会被覆盖。之后在后台“信源”里新建、修改和暂停。字段说明见 docs/customize.md。",
     "本站（国内实时热门话题）信源说明，2026-10-12 核对：",
     "RSSHub 地址 http://localhost:1200 是自建 RSSHub 实例的占位（默认端口）。公共实例 rsshub.app 已对订阅器返回 403、官方声明仅供测试，不要用于生产；部署前换成你自己的实例地址。",
-    "已核对路由名（按 RSSHub 源码 lib/routes，未实际抓取成功，因为公共实例 403）：/weibo/search/hot（微博热搜榜，WEIBO_COOKIES 可选）、/bilibili/popular/all（B站综合热门）、/bilibili/hot-search（B站热搜）。",
+    "2026-10-22 使用本机 RSSHub 实测：/weibo/search/hot 和 /bilibili/hot-search 可返回热词，但条目没有发布时间和正文；/bilibili/popular/all 可返回带发布时间的视频条目。",
+    "2026-10-22 使用本机 RSSHub 实测：/thepaper/list/25464（澎湃质量报告）返回 10 条文章，均有发布时间、原文链接和正文。该路由依赖澎湃新闻页面，上线前仍需在部署环境复测。",
     "抖音：RSSHub 目前没有抖音热榜路由（只有 hashtag/user/live 等）。douyin-hot-search 用的是抖音网页端热榜 JSON 接口，未验证：本机请求返回空内容，字段路径按常见返回结构推测，默认 enabled=false，上线前请在后台“预览抓取”确认或替换。",
     "微信视频号：没有已知的公开订阅或接口，这里没有放信源；需要你自己决定替代方案（例如第三方热榜聚合、人工录入或 external 外部推送）。",
     "全部信源 site_fulltext / syndicate_fulltext 保持关闭：平台未明确允许转载全文。"
@@ -65,6 +66,27 @@
       "tags": [
         "B站",
         "热榜"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rsshub-thepaper-quality-report",
+      "name": "澎湃新闻·澎湃质量报告",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "http://localhost:1200/thepaper/list/25464",
+        "summaryIsBody": true,
+        "_aihot": {
+          "initialBackfillLimit": 10
+        }
+      },
+      "tier": "T2",
+      "participation_mode": "editorial",
+      "interval_minutes": 60,
+      "tags": [
+        "澎湃新闻",
+        "质量报告"
       ],
       "site_fulltext": false,
       "syndicate_fulltext": false
