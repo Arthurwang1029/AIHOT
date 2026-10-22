@@ -1,3 +1,22 @@
+# CNHOT（开发中）
+
+本仓库是 [KKKKhazix/AIHOT](https://github.com/KKKKhazix/AIHOT) 的 Fork。[`customize-cn-hot-topics`](https://github.com/Arthurwang1029/AIHOT/tree/customize-cn-hot-topics) 分支尝试把上游的 AI 热点站框架改成国内民生话题站；改动仍在 [PR #1](https://github.com/Arthurwang1029/AIHOT/pull/1)，默认 `main` 分支尚未包含这些定制内容。
+
+截至 2026 年 10 月 22 日，本分支调整了站点文案、示范信源和部分筛选提示词。分类、主题与结构化提示词仍沿用 AI 示例，尚需对齐。三个启用的订阅源使用 `http://localhost:1200` 作为自建 RSSHub 的占位地址；抖音源尚未验证并默认停用，视频号没有配置来源。仓库目前没有提供可核实的 CNHOT 线上站点或持续采集结果。PR 中的测试数字是提交者的记录，尚没有该提交的自动检查结果。
+
+要查看这份定制代码，应克隆本 Fork 的分支：
+
+```bash
+git clone --branch customize-cn-hot-topics https://github.com/Arthurwang1029/AIHOT.git cnhot
+cd cnhot
+```
+
+实际运行前，请先按 [定制说明](docs/customize.md)确认分类和信源，并参考 [部署说明](docs/deploy.md)准备所需服务。下面保留的是**上游作者的原版 README**：其中的第一人称经历、`aihot.news`、性能数据和上游克隆命令均属于上游项目，不是 CNHOT 的成果或运行证明。
+
+---
+
+## 上游 AIHOT 框架说明（原版 README）
+
 <p align="center">
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="docs/assets/banner-dark.png">
