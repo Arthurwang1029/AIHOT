@@ -24,6 +24,10 @@ x-backend: &backend
       condition: service_healthy
 
 services:
+  rsshub:
+    image: diygod/rsshub:chromium-bundled
+    restart: unless-stopped
+
   db:
     image: postgres:17-alpine
     restart: unless-stopped
@@ -65,6 +69,8 @@ services:
     depends_on:
       setup:
         condition: service_completed_successfully
+      rsshub:
+        condition: service_started
 
   web:
     <<: *app

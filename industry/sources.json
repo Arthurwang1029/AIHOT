@@ -15,7 +15,7 @@
       "name": "微博热搜榜",
       "kind": "rss",
       "config": {
-        "feedUrl": "http://localhost:1200/weibo/search/hot",
+      "feedUrl": "http://rsshub:1200/weibo/search/hot",
         "_aihot": {
           "initialBackfillLimit": 20
         }
@@ -35,7 +35,7 @@
       "name": "B站综合热门",
       "kind": "rss",
       "config": {
-        "feedUrl": "http://localhost:1200/bilibili/popular/all",
+      "feedUrl": "http://rsshub:1200/bilibili/popular/all",
         "_aihot": {
           "initialBackfillLimit": 20
         }
@@ -55,7 +55,7 @@
       "name": "B站热搜",
       "kind": "rss",
       "config": {
-        "feedUrl": "http://localhost:1200/bilibili/hot-search",
+      "feedUrl": "http://rsshub:1200/bilibili/hot-search",
         "_aihot": {
           "initialBackfillLimit": 20
         }
@@ -75,7 +75,7 @@
       "name": "澎湃新闻·澎湃质量报告",
       "kind": "rss",
       "config": {
-        "feedUrl": "http://localhost:1200/thepaper/list/25464",
+      "feedUrl": "http://rsshub:1200/thepaper/list/25464",
         "summaryIsBody": true,
         "_aihot": {
           "initialBackfillLimit": 10

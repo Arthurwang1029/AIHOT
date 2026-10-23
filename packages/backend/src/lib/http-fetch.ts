@@ -62,6 +62,8 @@ export interface GuardedFetchOptions {
   redirectPolicy?: "same-origin";
   /** "egress" by default; see EgressRoute. */
   route?: EgressRoute;
+  /** Allows only the Docker-internal RSSHub service at http://rsshub:1200. */
+  allowInternalRssHub?: boolean;
 }
 
 export interface GuardedResponse {
@@ -80,15 +82,20 @@ export async function guardedFetch(input: string, opts: GuardedFetchOptions = {}
   // nominal 20 s image request to occupy the API for minutes.
   const signal = AbortSignal.timeout(opts.timeoutMs ?? 20_000);
   const route = opts.route ?? "egress";
-  const check = (target: string) => withinDeadline(assertPublicUrl(target, config.allowPrivateNetworkFetch,
-    proxied(new URL(target), route) ? egressResolver() : undefined), signal);
+  const internalRssHub = opts.allowInternalRssHub === true && new URL(input).origin === "http://rsshub:1200";
+  const check = (target: string) => {
+    const url = new URL(target);
+    if (internalRssHub && url.origin === "http://rsshub:1200") return Promise.resolve(url);
+    return withinDeadline(assertPublicUrl(target, config.allowPrivateNetworkFetch,
+      proxied(url, route) ? egressResolver() : undefined), signal);
+  };
   let url = await check(input);
   const maxRedirects = opts.maxRedirects ?? 5;
   const maxBytes = opts.maxBytes ?? 8 * 1024 * 1024;
   const headers = new Headers({ "user-agent": DEFAULT_UA, "accept-language": "zh-CN,zh;q=0.9,en;q=0.8", ...(opts.headers ?? {}) });
   const publicHeaders = new Set(["accept", "accept-language", "accept-encoding", "user-agent", "cache-control", "if-modified-since", "if-none-match", "range", "if-range"]);
   // Unknown custom headers and request bodies may carry credentials: the whole redirect chain keeps the first origin.
-  const originBound = opts.redirectPolicy === "same-origin" || opts.body !== undefined || Object.keys(opts.headers ?? {}).some((name) => !publicHeaders.has(name.toLowerCase()));
+  const originBound = internalRssHub || opts.redirectPolicy === "same-origin" || opts.body !== undefined || Object.keys(opts.headers ?? {}).some((name) => !publicHeaders.has(name.toLowerCase()));
   const initialOrigin = url.origin;
   let method = (opts.method ?? "GET").toUpperCase();
   let requestBody = opts.body;
@@ -98,7 +105,7 @@ export async function guardedFetch(input: string, opts: GuardedFetchOptions = {}
       headers: Object.fromEntries(headers),
       body: requestBody,
       redirect: "manual",
-      dispatcher: dispatcherFor(proxied(url, route)),
+      dispatcher: internalRssHub && url.origin === "http://rsshub:1200" ? undefined : dispatcherFor(proxied(url, route)),
       signal,
     });
     if ([301, 302, 303, 307, 308].includes(res.status) && res.headers.get("location")) {

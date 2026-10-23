@@ -61,3 +61,12 @@ test("direct host exceptions never grant permission to fetch a private address",
   try { await assert.rejects(guardedFetch("http://localhost/metadata"), /Blocked/); }
   finally { config.allowPrivateNetworkFetch = true; }
 });
+
+test("RSSHub access is limited to its exact Docker origin and cannot redirect elsewhere", async () => {
+  config.allowPrivateNetworkFetch = false;
+  mock.get("http://rsshub:1200").intercept({ path: "/thepaper" }).reply(200, "feed");
+  assert.equal((await guardedFetch("http://rsshub:1200/thepaper", { allowInternalRssHub: true, timeoutMs: 1000 })).text(), "feed");
+  await assert.rejects(guardedFetch("http://localhost:1200/thepaper", { allowInternalRssHub: true, timeoutMs: 1000 }), /Blocked/);
+  mock.get("http://rsshub:1200").intercept({ path: "/redirect" }).reply(302, "", { headers: { location: "http://127.0.0.1/metadata" } });
+  await assert.rejects(guardedFetch("http://rsshub:1200/redirect", { allowInternalRssHub: true, timeoutMs: 1000 }), /Blocked/);
+});
